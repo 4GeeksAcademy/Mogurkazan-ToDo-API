@@ -8,8 +8,8 @@ const Elementos = () => {
     const [tareas, setTareas] = useState([]);
     const [counter, setCounter] = useState(0);
     //Fetch
-    fetch('https://playground.4geeks.com/todo/todos/Mogurkazan', {
-      method: "PUT",
+    fetch('https://playground.4geeks.com/todo/todos/${usuario}', {
+      method: "POST",
       body: JSON.stringify(todos),
       headers: {
         "Content-Type": "application/json"
