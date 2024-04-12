@@ -6,7 +6,7 @@ import ReactDOM from "react-dom";
 import "../styles/index.css";
 
 //import your own components
-import { GetApi } from "./component/apitest";
+import Elementos from "./component/elements";
 
 //render your react application
-ReactDOM.render(<GetApi />, document.querySelector("#app"));
+ReactDOM.render(<Elementos />, document.querySelector("#app"));

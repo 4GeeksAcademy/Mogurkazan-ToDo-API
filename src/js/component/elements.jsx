@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 
 
 
@@ -7,32 +7,27 @@ const Elementos = () => {
     const [texto, setTexto] = useState("");
     const [tareas, setTareas] = useState([]);
     const [counter, setCounter] = useState(0);
+    const [datax, setDatax] = useState({ name: "", todos: [] });
+
+    useEffect(() => {
+        toDoList();
+    }, []);
     //Fetch
-    fetch('https://playground.4geeks.com/todo/todos/${usuario}', {
-      method: "POST",
-      body: JSON.stringify(todos),
-      headers: {
-        "Content-Type": "application/json"
-      }
-    })
-    .then(resp => {
-        console.log(resp.ok); // Será true si la respuesta es exitosa
-        console.log(resp.status); // El código de estado 200, 300, 400, etc.
-        console.log(resp.text()); // Intentará devolver el resultado exacto como string
-        return resp.json(); // Intentará parsear el resultado a JSON y retornará una promesa donde puedes usar .then para seguir con la lógica
-    })
-    .then(data => {
-        // Aquí es donde debe comenzar tu código después de que finalice la búsqueda
-        console.log(data); // Esto imprimirá en la consola el objeto exacto recibido del servidor
-    })
-    .catch(error => {
-        // Manejo de errores
-        console.log(error);
-    });
+    function toDoList() {
+        console.log('to do');
+        fetch('https://playground.4geeks.com/todo/users/Mogurkazan')
+        .then((response) => response.json())
+        .then((data)=> {
+            setDatax(data);
+            setTareas(tareas => tareas.concat(data.todos));
+            setCounter(data.todos.length);
+        });
+    }
+ 
     //mi segunda prueba
     const agregarTarea = (e) => {
         if (e.key === 'Enter' && texto !== '') {
-            setTareas([...tareas, texto]);
+            setTareas([...tareas, {label: texto}]);
             setTexto('');
             setCounter(counter + 1);
         }
@@ -55,7 +50,7 @@ const Elementos = () => {
                 
                 <ul className="m-0 p-0" >{tareas.map((item, index) => (
                     <div className="cajita d-flex">
-                        <p className="ps-5" key={index}>{item}
+                        <p className="ps-5" key={index}>{item.label}
                         </p>
                         <button className="x btn-sm  rounded-pill ms-auto text-end" onClick={() => eliminarTarea(index)}>X</button>
                     </div>

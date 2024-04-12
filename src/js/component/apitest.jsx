@@ -2,11 +2,15 @@ import React, {useEffect, useState} from "react";
 
 export const GetApi = () => {
     const [datax, setDatax] = useState({ name: "", todos: [] });
-    
-
-        function toDoList() {
+        function getDoList() {
             console.log('to do');
-            fetch('https://playground.4geeks.com/todo/users/JorgeAJT')
+            fetch('https://playground.4geeks.com/todo/users/Mogurkazan')
+            .then((response) => response.json())
+            .then((data)=> setDatax(data))
+        }
+        function postDoList() {
+            console.log('to do');
+            fetch('https://playground.4geeks.com/todo/users/Mogurkazan')
             .then((response) => response.json())
             .then((data)=> setDatax(data))
         }
@@ -21,7 +25,7 @@ export const GetApi = () => {
                     <li key={index}>{todo.label}</li>
                 ))}
             </ul>
-            <button onClick={toDoList}>cargar</button>
+            <button onClick={getDoList}>cargar</button>
         </div>
     )
 };
