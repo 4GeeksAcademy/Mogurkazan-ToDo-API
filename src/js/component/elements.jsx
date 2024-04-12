@@ -14,7 +14,6 @@ const Elementos = () => {
     }, []);
     //Fetch
     function toDoList() {
-        console.log('to do');
         fetch('https://playground.4geeks.com/todo/users/Mogurkazan')
         .then((response) => response.json())
         .then((data)=> {
@@ -23,28 +22,53 @@ const Elementos = () => {
             setCounter(data.todos.length);
         });
     }
- 
-    //mi segunda prueba
-    const agregarTarea = (e) => {
+    function agregarTarea(e) {
         if (e.key === 'Enter' && texto !== '') {
-            setTareas([...tareas, {label: texto}]);
+            setTareas([...tareas, { label: texto }]);
             setTexto('');
             setCounter(counter + 1);
+
+            const requestOptions = {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    "label": texto,
+                    "is_done": false
+                })
+            };
+
+            fetch('https://playground.4geeks.com/todo/todos/Mogurkazan', requestOptions)
+            .then(response => response.json())
+            .then(data => console.log(data)); // Manejar la respuesta si es necesario
         }
-    };
-    const eliminarTarea = (indice) => {
-        const nuevasTareas = [...tareas];
-        nuevasTareas.splice(indice, 1);
-        setTareas(nuevasTareas);
-        setCounter(counter -1);
     }
+    const eliminarTarea = (indice) => {
+        const tareaAEliminar = tareas[indice];
+        const nuevasTareas = tareas.filter((_, index) => index !== indice);
+        setTareas(nuevasTareas);
+        setCounter(counter - 1);
+    
+        fetch(`https://playground.4geeks.com/todo/todos/${tareaAEliminar.id}`, {
+            method: 'DELETE'
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Failed to delete task');
+            }
+            console.log(`Task with ID ${tareaAEliminar.id} deleted successfully`);
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    };
+    
     
     const handleChange = (e) => {
         setTexto(e.target.value);
     };
 	return (
         <div className="caja container d-flex flex-column justify-content-center text-center">
-            <h1>TAREAS</h1>
+            <h1>Mogurkazan</h1>
             <div className="carta card">
                 <input className="entrada text-start ps-5" type="text" value={texto} onChange={handleChange} onKeyDown={agregarTarea} />
                 
